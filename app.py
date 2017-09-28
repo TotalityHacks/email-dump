@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import re
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -25,6 +26,11 @@ db.session.commit()
 
 @app.route("/",  methods=['POST'])
 def index():
+	email = request.form["email"]
+
+	if not re.match("[^@]+@[^@]+\.[^@]+"):
+		abort(400)
+		
     user = User(request.form["email"])
     db.session.add(user)
     db.session.commit()
