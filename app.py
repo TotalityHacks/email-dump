@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request
+from flask import Flask, request, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
@@ -28,4 +28,4 @@ def index():
     user = User(request.form["email"])
     db.session.add(user)
     db.session.commit()
-    return " ".join([str(u) for u in User.query.all()])
+    return redirect("https://totalityhacks.com/")
