@@ -1,4 +1,5 @@
 import os
+import re
 from flask import Flask, request, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -25,7 +26,11 @@ db.session.commit()
 
 @app.route("/",  methods=['POST'])
 def index():
-    user = User(request.form["email"])
+    pattern = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
+    email = request.form.get("email")
+    if pattern.match(email) is None:
+        return "Invalid email", 400
+    user = User(email)
     db.session.add(user)
     db.session.commit()
     return redirect("https://totalityhacks.com/")
