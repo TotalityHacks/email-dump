@@ -28,4 +28,4 @@ def index():
     user = User(request.form["email"])
     db.session.add(user)
     db.session.commit()
-    return User.query.all()
+    return " ".join([str(u) for u in User.query.all()])
