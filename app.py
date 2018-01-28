@@ -3,6 +3,7 @@ import re
 from flask import Flask, request, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import requests
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -33,4 +34,15 @@ def index():
     user = User(email)
     db.session.add(user)
     db.session.commit()
+    requests.post(
+        'https://{}.api.mailchimp.com/3.0/lists/{}/members'.format(os.environ['MAILCHIMP_DC'], os.environ['MAILCHIMP_LIST_ID']),
+        auth=(
+            'totality',
+            os.environ['MAILCHIMP_API_KEY']
+        ),
+        json={
+            'email_address': email,
+            'status': 'subscribed'
+        }
+    )
     return redirect("https://totalityhacks.com/")
