@@ -35,11 +35,7 @@ def index():
     db.session.add(user)
     db.session.commit()
     requests.post(
-        'https://'
-        + os.environ['MAILCHIMP_DC']
-        + '.api.mailchimp.com/3.0/lists/'
-        + os.environ['MAILCHIMP_LIST_ID']
-        + '/members',
+        'https://{}.api.mailchimp.com/3.0/lists/{}/members'.format(os.environ['MAILCHIMP_DC'], os.environ['MAILCHIMP_LIST_ID']),
         auth=(
             'totality',
             os.environ['MAILCHIMP_API_KEY']
